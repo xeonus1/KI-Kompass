@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KI-Kompass — Wirtschaftskammer Österreich</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --wko-blue:    #002b55;
+  --wko-mid:     #003d78;
+  --wko-soft:    #1a5490;
+  --accent:      #c8102e;       /* WKO red accent */
+  --teal:        #007a8a;
+  --teal-lt:     #e6f3f5;
+  --gold:        #b8860b;
+  --gold-lt:     #fdf8ee;
+  --white:       #ffffff;
+  --off:         #f8f9fb;
+  --off2:        #f2f4f7;
+  --border:      #dde3ea;
+  --border-md:   #c5cdd8;
+  --muted:       #6b7a8d;
+  --body:        #3a4a5c;
+  --ink:         #1a2635;
+  --shadow-xs:   0 1px 4px rgba(0,43,85,0.07);
+  --shadow-sm:   0 2px 10px rgba(0,43,85,0.09);
+  --shadow:      0 4px 24px rgba(0,43,85,0.11);
+  --shadow-lg:   0 8px 40px rgba(0,43,85,0.14);
+  --r:           6px;
+  --r-md:        10px;
+  --r-lg:        14px;
+  --t:           0.18s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif;
+  background: var(--white);
+  color: var(--body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════ */
+.page { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 640px) { .page { padding: 0 16px; } }
+
+/* ═══════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════ */
+.header {
+  background: var(--wko-blue);
+  border-bottom: 3px solid var(--accent);
+  position: sticky; top: 0; z-index: 200;
+}
+.header__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px; gap: 24px;
+}
+.header__brand { display: flex; align-items: center; gap: 14px; }
+.header__logo-box {
+  width: 40px; height: 40px; border-radius: var(--r);
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Source Serif 4', serif;
+  font-size: 16px; font-weight: 700; color: #fff;
+  letter-spacing: -0.02em; flex-shrink: 0;
+}
+.header__title-wrap { display: flex; flex-direction: column; gap: 1px; }
+.header__title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 17px; font-weight: 600; color: #fff;
+  letter-spacing: 0.01em;
+}
+.header__sub {
+  font-size: 11px; color: rgba(255,255,255,0.5);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.header__nav { display: flex; align-items: center; gap: 6px; }
+.header__nav-link {
+  font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.65);
+  padding: 7px 14px; border-radius: var(--r);
+  border: none; background: none;
+  transition: all var(--t); cursor: pointer;
+}
+.header__nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
+.header__nav-link--cta {
+  background: var(--accent); color: #fff !important;
+  font-weight: 600;
+}
+.header__nav-link--cta:hover { background: #a50d26; }
+@media (max-width: 600px) {
+  .header__nav .header__nav-link:not(.header__nav-link--cta) { display: none; }
+}
+
+/* ═══════════════════════════════════════════════
+   BREADCRUMB BAR
+═══════════════════════════════════════════════ */
+.breadbar {
+  background: var(--off); border-bottom: 1px solid var(--border);
+  padding: 0;
+  height: 0; overflow: hidden;
+  transition: height var(--t);
+}
+.breadbar.visible { height: 44px; }
+.breadbar__inner {
+  display: flex; align-items: center; gap: 0;
+  height: 44px; font-size: 13px; color: var(--muted);
+}
+.breadcrumb-item {
+  display: flex; align-items: center; gap: 0;
+}
+.breadcrumb-item button {
+  background: none; border: none; font-size: 13px;
+  color: var(--wko-blue); font-weight: 500;
+  cursor: pointer; padding: 4px 8px; border-radius: var(--r);
+  transition: background var(--t);
+}
+.breadcrumb-item button:hover { background: var(--border); }
+.breadcrumb-sep { margin: 0 4px; color: var(--border-md); font-size: 15px; }
+.breadcrumb-current { font-weight: 500; color: var(--body); padding: 4px 8px; }
+
+/* ═══════════════════════════════════════════════
+   STEP PROGRESS
+═══════════════════════════════════════════════ */
+.step-bar {
+  display: flex; align-items: center; gap: 0;
+  padding: 20px 0 0;
+}
+.step-pip {
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer;
+}
+.step-pip__circle {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--border-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--muted);
+  background: var(--white);
+  transition: all var(--t);
+}
+.step-pip.active .step-pip__circle {
+  border-color: var(--wko-blue); background: var(--wko-blue); color: #fff;
+}
+.step-pip.done .step-pip__circle {
+  border-color: var(--teal); background: var(--teal); color: #fff;
+}
+.step-pip.done .step-pip__circle::before { content: '✓'; font-size: 12px; }
+.step-pip.done .step-pip__circle span { display: none; }
+.step-pip__label {
+  font-size: 12px; font-weight: 500; color: var(--muted);
+  transition: color var(--t);
+}
+.step-pip.active .step-pip__label { color: var(--wko-blue); font-weight: 600; }
+.step-pip.done .step-pip__label { color: var(--teal); }
+.step-connector {
+  flex: 1; height: 1px; background: var(--border); margin: 0 10px;
+  min-width: 24px; max-width: 80px; position: relative; overflow: hidden;
+}
+.step-connector.done::after {
+  content: ''; position: absolute; inset: 0;
+  background: var(--teal); animation: connFill 0.3s ease;
+}
+@keyframes connFill { from { width: 0; } to { width: 100%; } }
+
+/* ═══════════════════════════════════════════════
+   PAGE SECTIONS
+═══════════════════════════════════════════════ */
+.app-section { display: none; }
+.app-section.active { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ═══════════════════════════════════════════════
+   HERO / SECTION HEADERS
+═══════════════════════════════════════════════ */
+.section-head {
+  padding: 40px 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.section-head__eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 8px; display: block;
+}
+.section-head__title {
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600; color: var(--wko-blue);
+  margin-bottom: 8px; line-height: 1.25;
+}
+.section-head__desc {
+  font-size: 15px; color: var(--muted);
+  max-width: 560px; line-height: 1.65;
+}
+
+/* ═══════════════════════════════════════════════
+   HERO BANNER
+═══════════════════════════════════════════════ */
+.hero-banner {
+  background: linear-gradient(120deg, var(--wko-blue) 0%, var(--wko-mid) 100%);
+  padding: 56px 0 52px;
+  position: relative; overflow: hidden;
+}
+.hero-banner::after {
+  content: '';
+  position: absolute; top: 0; right: 0; bottom: 0; left: 50%;
+  background: url("data:image/svg+xml,%3Csvg width='600' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='400' cy='100' r='300' fill='none' stroke='rgba(255,255,255,0.03)' stroke-width='60'/%3E%3Ccircle cx='500' cy='300' r='200' fill='none' stroke='rgba(255,255,255,0.03)' stroke-width='40'/%3E%3C/svg%3E") right center / auto 100% no-repeat;
+  pointer-events: none;
+}
+.hero-banner__inner { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px; padding: 5px 14px;
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.85);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #4dd; flex-shrink: 0;
+}
+.hero-banner h1 {
+  font-family: 'Source Serif 4', serif;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  font-weight: 600; color: #fff;
+  line-height: 1.15; letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.hero-banner h1 em { font-style: normal; color: rgba(255,255,255,0.6); }
+.hero-banner p {
+  font-size: 1.05rem; color: rgba(255,255,255,0.65);
+  line-height: 1.7; max-width: 500px; margin-bottom: 32px;
+}
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-stats {
+  display: flex; gap: 40px; flex-wrap: wrap;
+  margin-top: 44px; padding-top: 28px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+.hero-stat__num {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.7rem; font-weight: 700; color: #fff;
+  line-height: 1;
+}
+.hero-stat__label { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 3px; }
+
+/* ═══════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 600; font-size: 14px;
+  padding: 10px 22px; border-radius: var(--r);
+  border: none; cursor: pointer;
+  transition: all var(--t); white-space: nowrap;
+}
+.btn--primary { background: var(--accent); color: #fff; }
+.btn--primary:hover { background: #a50d26; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.btn--blue { background: var(--wko-blue); color: #fff; }
+.btn--blue:hover { background: var(--wko-mid); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.btn--outline { background: transparent; color: var(--wko-blue); border: 1.5px solid var(--wko-blue); }
+.btn--outline:hover { background: var(--wko-blue); color: #fff; }
+.btn--ghost { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+.btn--ghost:hover { background: rgba(255,255,255,0.18); }
+.btn--sm { font-size: 13px; padding: 7px 16px; }
+.btn--back {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13px; font-weight: 500; color: var(--muted);
+  background: var(--off); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 7px 14px;
+  cursor: pointer; transition: all var(--t);
+}
+.btn--back:hover { color: var(--wko-blue); border-color: var(--wko-blue); background: var(--white); }
+
+/* ═══════════════════════════════════════════════
+   STEP 1: FACHGRUPPEN GRID
+═══════════════════════════════════════════════ */
+.fg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  padding-bottom: 48px;
+}
+.fg-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 24px 22px;
+  cursor: pointer;
+  transition: all var(--t);
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow-xs);
+}
+.fg-card::after {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--wko-blue);
+  transform: scaleY(0); transform-origin: bottom;
+  transition: transform var(--t);
+}
+.fg-card:hover {
+  border-color: var(--wko-blue);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.fg-card:hover::after { transform: scaleY(1); }
+.fg-icon {
+  width: 44px; height: 44px; border-radius: var(--r);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 14px;
+  background: var(--off2); flex-shrink: 0;
+}
+.fg-title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.05rem; font-weight: 600;
+  color: var(--wko-blue); margin-bottom: 5px;
+}
+.fg-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
+.fg-footer { display: flex; align-items: center; justify-content: space-between; }
+.fg-count {
+  font-size: 11px; font-weight: 600; color: var(--teal);
+  background: var(--teal-lt); border: 1px solid rgba(0,122,138,0.15);
+  border-radius: 100px; padding: 2px 10px;
+}
+.fg-arrow {
+  width: 26px; height: 26px; border-radius: var(--r);
+  background: var(--off2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 13px;
+  transition: all var(--t);
+}
+.fg-card:hover .fg-arrow { background: var(--wko-blue); color: #fff; border-color: var(--wko-blue); }
+
+/* ═══════════════════════════════════════════════
+   STEP 2: BEREICHE GRID
+═══════════════════════════════════════════════ */
+.fachgruppe-header {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--off); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 20px 24px;
+  margin-bottom: 24px;
+}
+.fachgruppe-header__icon {
+  width: 48px; height: 48px; border-radius: var(--r-md);
+  background: var(--wko-blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.fachgruppe-header__title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.1rem; font-weight: 600; color: var(--wko-blue); margin-bottom: 2px;
+}
+.fachgruppe-header__desc { font-size: 13px; color: var(--muted); }
+
+.bereich-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  padding-bottom: 48px;
+}
+.bereich-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 20px;
+  cursor: pointer; transition: all var(--t);
+  box-shadow: var(--shadow-xs);
+}
+.bereich-card:hover {
+  border-color: var(--teal);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.bereich-icon {
+  width: 38px; height: 38px; border-radius: var(--r);
+  background: var(--teal-lt); font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.bereich-title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.95rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 4px;
+}
+.bereich-desc { font-size: 12px; color: var(--muted); line-height: 1.45; margin-bottom: 12px; }
+.bereich-count {
+  font-size: 11px; font-weight: 600;
+  color: var(--gold); background: var(--gold-lt);
+  border: 1px solid rgba(184,134,11,0.15);
+  border-radius: 100px; padding: 2px 10px;
+  display: inline-block;
+}
+
+/* ═══════════════════════════════════════════════
+   STEP 3: USE CASE GRID
+═══════════════════════════════════════════════ */
+.bereich-context {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 20px; border-bottom: 1px solid var(--border);
+}
+.bereich-context__icon {
+  width: 36px; height: 36px; border-radius: var(--r);
+  background: var(--teal-lt); font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.bereich-context__label { font-size: 13px; color: var(--muted); margin-bottom: 1px; }
+.bereich-context__title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.05rem; font-weight: 600; color: var(--ink);
+}
+
+.uc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px; padding-bottom: 48px;
+}
+.uc-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 20px;
+  cursor: pointer; transition: all var(--t);
+  box-shadow: var(--shadow-xs);
+  display: flex; flex-direction: column;
+}
+.uc-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px); box-shadow: var(--shadow);
+}
+.uc-card__tag {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 6px;
+}
+.uc-card__title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.95rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 6px; line-height: 1.3;
+}
+.uc-card__desc { font-size: 13px; color: var(--muted); line-height: 1.5; flex: 1; margin-bottom: 14px; }
+.uc-card__footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 12px; border-top: 1px solid var(--off2);
+}
+.uc-tools-count { font-size: 11px; color: var(--muted); }
+.uc-arrow {
+  width: 26px; height: 26px; border-radius: var(--r);
+  background: var(--off2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 12px;
+  transition: all var(--t);
+}
+.uc-card:hover .uc-arrow { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ═══════════════════════════════════════════════
+   STEP 4: DETAIL VIEW
+═══════════════════════════════════════════════ */
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 28px; align-items: start;
+  padding-bottom: 64px;
+}
+@media (max-width: 880px) { .detail-layout { grid-template-columns: 1fr; } }
+
+.detail-main { display: flex; flex-direction: column; gap: 20px; }
+.detail-sidebar { display: flex; flex-direction: column; gap: 18px; }
+
+/* Hero card */
+.detail-hero {
+  background: linear-gradient(135deg, var(--wko-blue) 0%, var(--wko-mid) 100%);
+  border-radius: var(--r-lg); padding: 28px 32px;
+  color: #fff; position: relative; overflow: hidden;
+}
+.detail-hero::after {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(255,255,255,0.04); pointer-events: none;
+}
+.detail-hero__eyebrow {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6); margin-bottom: 10px;
+}
+.detail-hero__title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.5rem; font-weight: 600; color: #fff;
+  line-height: 1.25; margin-bottom: 10px;
+}
+.detail-hero__desc { font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.7; }
+
+/* Section cards */
+.d-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 22px;
+  box-shadow: var(--shadow-xs);
+}
+.d-card-head {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 7px;
+}
+
+/* KI Nutzen */
+.nutzen-box {
+  background: var(--teal-lt); border: 1px solid rgba(0,122,138,0.2);
+  border-radius: var(--r-md); padding: 20px 22px;
+  border-left: 4px solid var(--teal);
+}
+.nutzen-box__label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 8px;
+}
+.nutzen-box__text { font-size: 14px; color: var(--body); line-height: 1.65; }
+
+/* Benefit items */
+.benefit-items { display: flex; flex-direction: column; gap: 8px; }
+.bi {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; background: var(--off); border-radius: var(--r);
+  border: 1px solid var(--border);
+}
+.bi__icon {
+  width: 26px; height: 26px; border-radius: 5px; flex-shrink: 0;
+  background: var(--teal-lt); font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.bi__text strong { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 1px; }
+.bi__text span { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+/* Tool categories */
+.tool-cat { margin-bottom: 20px; }
+.tool-cat:last-child { margin-bottom: 0; }
+.tool-cat__label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--wko-blue); margin-bottom: 10px;
+  padding-left: 10px; border-left: 3px solid var(--accent);
+}
+.tool-items { display: flex; flex-direction: column; gap: 10px; }
+.tool-item {
+  background: var(--off); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 14px 16px;
+  transition: border-color var(--t);
+}
+.tool-item:hover { border-color: var(--teal); }
+.tool-item__head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 5px;
+}
+.tool-item__name { font-weight: 600; font-size: 14px; color: var(--ink); }
+.tool-item__badge {
+  font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 100px;
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
+.tool-item__badge--free { background: rgba(0,122,138,0.1); color: var(--teal); border: 1px solid rgba(0,122,138,0.2); }
+.tool-item__badge--abo { background: rgba(0,43,85,0.08); color: var(--wko-blue); border: 1px solid rgba(0,43,85,0.15); }
+.tool-item__badge--ent { background: rgba(184,134,11,0.1); color: var(--gold); border: 1px solid rgba(184,134,11,0.2); }
+.tool-item__desc { font-size: 13px; color: var(--muted); line-height: 1.45; margin-bottom: 6px; }
+.tool-item__use { font-size: 12px; color: var(--teal); font-style: italic; }
+
+/* Sidebar */
+.sidebar-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 18px;
+  box-shadow: var(--shadow-xs);
+}
+.sidebar-card__head {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 12px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
+}
+.sidebar-pricing { display: flex; flex-direction: column; gap: 7px; }
+.sp-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 10px; background: var(--off); border-radius: var(--r);
+  border: 1px solid var(--border);
+}
+.sp-label { font-size: 12px; color: var(--body); }
+.sp-val { font-size: 12px; font-weight: 600; color: var(--wko-blue); font-variant-numeric: tabular-nums; }
+.sidebar-you-are {
+  font-size: 12px; line-height: 1.9; color: var(--muted);
+}
+.sidebar-you-are .l1 { color: var(--teal); font-weight: 500; }
+.sidebar-you-are .l2 { color: var(--gold); font-weight: 500; padding-left: 12px; }
+.sidebar-you-are .l3 { color: var(--wko-blue); font-weight: 500; padding-left: 24px; }
+.sidebar-you-are .l4 { color: var(--accent); font-weight: 600; padding-left: 24px; }
+.cta-sidebar-btn {
+  width: 100%; background: var(--accent); color: #fff;
+  border: none; border-radius: var(--r); padding: 10px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all var(--t);
+}
+.cta-sidebar-btn:hover { background: #a50d26; transform: translateY(-1px); }
+
+/* ═══════════════════════════════════════════════
+   STEP 4: INTEGRATION SECTION
+═══════════════════════════════════════════════ */
+.int-section {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-md); overflow: hidden;
+  box-shadow: var(--shadow-xs);
+}
+.int-section__header {
+  background: linear-gradient(120deg, #002b55 0%, #003d78 100%);
+  padding: 20px 24px; position: relative;
+}
+.int-section__header::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--accent);
+}
+.int-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(200,16,46,0.2); border: 1px solid rgba(200,16,46,0.3);
+  border-radius: 100px; padding: 3px 12px;
+  font-size: 10px; font-weight: 600; color: #f88;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;
+}
+.int-section__header h3 {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 4px;
+}
+.int-section__header p { font-size: 13px; color: rgba(255,255,255,0.6); max-width: 520px; }
+.int-cards {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; border-top: 1px solid var(--border);
+}
+@media (max-width: 580px) { .int-cards { grid-template-columns: 1fr; } }
+.int-card {
+  padding: 20px 22px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--t);
+}
+.int-card:hover { background: var(--off); }
+.int-card:nth-child(2n) { border-right: none; }
+.int-card:nth-last-child(-n+2) { border-bottom: none; }
+@media (max-width: 580px) {
+  .int-card { border-right: none !important; }
+  .int-card:last-child { border-bottom: none; }
+}
+.int-card__icon { font-size: 24px; margin-bottom: 10px; display: block; }
+.int-card__title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.95rem; font-weight: 600; color: var(--wko-blue); margin-bottom: 6px;
+}
+.int-card__desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+.int-meta { display: flex; flex-direction: column; gap: 4px; }
+.int-meta-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--muted);
+}
+.int-meta-item::before {
+  content: ''; width: 4px; height: 4px; border-radius: 50%;
+  background: var(--teal); flex-shrink: 0;
+}
+
+/* Booking form */
+.booking-section {
+  padding: 24px; border-top: 1px solid var(--border);
+  background: var(--off);
+}
+.booking-section h4 {
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.95rem; font-weight: 600; color: var(--ink);
+  margin-bottom: 4px;
+}
+.booking-section p { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+.booking-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 560px) { .booking-grid { grid-template-columns: 1fr; } }
+.fg-input { display: flex; flex-direction: column; gap: 4px; }
+.fg-input label { font-size: 12px; font-weight: 500; color: var(--body); }
+.fg-input input,
+.fg-input select,
+.fg-input textarea {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 8px 12px;
+  font-family: 'Source Sans 3', sans-serif; font-size: 13px; color: var(--ink);
+  outline: none; transition: all var(--t);
+}
+.fg-input input:focus,
+.fg-input select:focus,
+.fg-input textarea:focus {
+  border-color: var(--wko-blue); box-shadow: 0 0 0 3px rgba(0,43,85,0.07);
+}
+.fg-input textarea { resize: vertical; min-height: 80px; }
+.fg-full { grid-column: 1 / -1; }
+.booking-submit {
+  width: 100%; margin-top: 12px;
+  background: var(--accent); color: #fff; border: none;
+  border-radius: var(--r); padding: 11px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all var(--t);
+}
+.booking-submit:hover { background: #a50d26; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+
+/* Why box */
+.why-box {
+  padding: 18px 22px; border-top: 1px solid var(--border);
+  display: flex; gap: 12px; align-items: flex-start;
+  background: var(--gold-lt);
+}
+.why-box__icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.why-box h4 { font-size: 13px; font-weight: 600; color: var(--gold); margin-bottom: 4px; }
+.why-box p { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+/* ═══════════════════════════════════════════════
+   CONTACT + CTA SECTION
+═══════════════════════════════════════════════ */
+.cta-band {
+  background: var(--wko-blue);
+  padding: 56px 0;
+}
+.cta-band__inner { max-width: 640px; }
+.cta-band h2 {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.8rem; font-weight: 600; color: #fff;
+  margin-bottom: 12px;
+}
+.cta-band p { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 28px; }
+.cta-steps {
+  display: flex; gap: 20px; flex-wrap: wrap; margin-top: 36px;
+  padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.1);
+}
+.cta-step { }
+.cta-step__num {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.4rem; font-weight: 700; color: #aac8e8; line-height: 1;
+}
+.cta-step__label { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+
+/* CONTACT FORM */
+.contact-section { padding: 72px 0; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+@media (max-width: 720px) { .contact-grid { grid-template-columns: 1fr; } }
+.contact-info h2 {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.6rem; color: var(--wko-blue); margin-bottom: 10px;
+}
+.contact-info p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+.hotline {
+  background: var(--off); border: 1px solid var(--border);
+  border-left: 4px solid var(--wko-blue); border-radius: 0 var(--r) var(--r) 0;
+  padding: 16px 18px;
+}
+.hotline__label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 4px; }
+.hotline__number { font-size: 1.2rem; font-weight: 600; color: var(--wko-blue); margin-bottom: 2px; }
+.hotline__hours { font-size: 12px; color: var(--muted); }
+.contact-form {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 28px;
+  box-shadow: var(--shadow);
+}
+.contact-form h3 {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.1rem; color: var(--ink); margin-bottom: 20px;
+}
+.cf-form { display: flex; flex-direction: column; gap: 12px; }
+.cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 440px) { .cf-row { grid-template-columns: 1fr; } }
+.cf-submit {
+  background: var(--wko-blue); color: #fff; border: none;
+  border-radius: var(--r); padding: 11px; width: 100%;
+  font-family: 'Source Sans 3', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all var(--t); margin-top: 4px;
+}
+.cf-submit:hover { background: var(--wko-mid); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════ */
+.footer {
+  background: var(--off); border-top: 1px solid var(--border);
+  padding: 24px 0; text-align: center;
+}
+.footer p { font-size: 12px; color: var(--muted); }
+.footer a { color: var(--wko-blue); }
+.footer a:hover { text-decoration: underline; }
+
+/* ═══════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════ */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  background: var(--wko-blue); color: #fff;
+  border-left: 4px solid var(--teal);
+  border-radius: var(--r); padding: 12px 18px;
+  font-size: 13px; font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(60px); opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34,1.5,0.64,1);
+  pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE UTILITY
+═══════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  .hero-stats { gap: 24px; }
+  .detail-layout { gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─────────────────────────────── -->
+<header class="header">
+  <div class="page">
+    <div class="header__inner">
+      <div class="header__brand">
+        <div class="header__logo-box">KI</div>
+        <div class="header__title-wrap">
+          <div class="header__title">KI-Kompass</div>
+          <div class="header__sub">Wirtschaftskammer Österreich</div>
+        </div>
+      </div>
+      <nav class="header__nav">
+        <button class="header__nav-link" onclick="scrollTo('#kontakt')">Kontakt</button>
+        <button class="header__nav-link" onclick="scrollTo('#cta')">Pilotprojekt</button>
+        <button class="header__nav-link header__nav-link--cta" onclick="scrollTo('#app')">Tool starten →</button>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- ─── BREADCRUMB BAR ────────────────────── -->
+<div class="breadbar" id="breadbar">
+  <div class="page">
+    <div class="breadbar__inner" id="breadbar-inner"></div>
+  </div>
+</div>
+
+<!-- ─── HERO ──────────────────────────────── -->
+<section class="hero-banner">
+  <div class="page">
+    <div class="hero-banner__inner">
+      <div class="hero-badge">Interaktives Orientierungstool</div>
+      <h1>KI im Unternehmen —<br><em>gezielt und sicher einsetzen</em></h1>
+      <p>Der KI-Kompass der Wirtschaftskammer zeigt Unternehmerinnen und Unternehmern in drei einfachen Schritten, wo künstliche Intelligenz in ihrem Arbeitsalltag konkret helfen kann — verständlich, praxisnah und sofort nutzbar.</p>
+      <div class="hero-actions">
+        <button class="btn btn--primary" onclick="scrollTo('#app')">Tool starten →</button>
+        <button class="btn btn--ghost" onclick="scrollTo('#cta')">Pilotprojekt anfragen</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat__num">8</div>
+          <div class="hero-stat__label">WKO-Fachgruppen</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat__num">40+</div>
+          <div class="hero-stat__label">Anwendungsfälle</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat__num">60+</div>
+          <div class="hero-stat__label">Empfohlene Tools</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat__num">4</div>
+          <div class="hero-stat__label">Schritte zur Lösung</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── APP ───────────────────────────────── -->
+<div id="app" style="padding: 32px 0 0;">
+  <div class="page">
+
+    <!-- Step progress -->
+    <div class="step-bar" id="step-bar">
+      <div class="step-pip active" id="sp-1"><div class="step-pip__circle"><span>1</span></div><div class="step-pip__label">Fachgruppe</div></div>
+      <div class="step-connector" id="sc-1"></div>
+      <div class="step-pip" id="sp-2"><div class="step-pip__circle"><span>2</span></div><div class="step-pip__label">Bereich</div></div>
+      <div class="step-connector" id="sc-2"></div>
+      <div class="step-pip" id="sp-3"><div class="step-pip__circle"><span>3</span></div><div class="step-pip__label">Use Case</div></div>
+      <div class="step-connector" id="sc-3"></div>
+      <div class="step-pip" id="sp-4"><div class="step-pip__circle"><span>4</span></div><div class="step-pip__label">KI-Lösung &amp; Einführung</div></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="app-section active" id="sec-1">
+      <div class="section-head">
+        <span class="section-head__eyebrow">Schritt 1 von 4</span>
+        <h2 class="section-head__title">Wählen Sie Ihre Fachgruppe</h2>
+        <p class="section-head__desc">Alle acht WKO-Fachgruppen sind hinterlegt. Klicken Sie auf Ihre Branche, um die relevanten KI-Anwendungsfälle zu sehen.</p>
+      </div>
+      <div class="fg-grid" id="fg-grid"></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="app-section" id="sec-2">
+      <div class="section-head" style="padding-top:28px">
+        <button class="btn--back" onclick="goTo(1)" style="margin-bottom:16px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
+          Zurück zu Fachgruppen
+        </button>
+        <div id="fg-header"></div>
+      </div>
+      <div class="bereich-grid" id="bereich-grid"></div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="app-section" id="sec-3">
+      <div class="section-head" style="padding-top:28px">
+        <button class="btn--back" onclick="goTo(2)" style="margin-bottom:16px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
+          Zurück zu Bereichen
+        </button>
+        <div id="bereich-context"></div>
+        <span class="section-head__eyebrow" style="margin-top:12px">Schritt 3 von 4</span>
+        <h2 class="section-head__title">Wählen Sie einen Anwendungsfall</h2>
+        <p class="section-head__desc">Klicken Sie auf einen konkreten Use Case, um KI-Tools, Nutzen und Kostenmodelle zu sehen.</p>
+      </div>
+      <div class="uc-grid" id="uc-grid"></div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="app-section" id="sec-4">
+      <div style="padding-top:28px; margin-bottom:20px">
+        <button class="btn--back" onclick="goTo(3)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
+          Zurück zu Use Cases
+        </button>
+      </div>
+      <div class="detail-layout" id="detail-content"></div>
+    </div>
+
+  </div><!-- /page -->
+</div><!-- /app -->
+
+<!-- ─── CTA ────────────────────────────────── -->
+<section class="cta-band" id="cta" style="margin-top:64px">
+  <div class="page">
+    <div class="cta-band__inner">
+      <span class="section-head__eyebrow" style="color:rgba(255,255,255,0.4)">Für die Wirtschaftskammer Österreich</span>
+      <h2>Pilotprojekt gemeinsam starten</h2>
+      <p>Der KI-Kompass kann innerhalb von 4–6 Wochen als Pilotprojekt mit ausgewählten Fachgruppen und Unternehmen gestartet werden — mit messbaren Ergebnissen als Grundlage für einen bundesweiten Rollout.</p>
+      <div class="hero-actions">
+        <button class="btn btn--primary" onclick="scrollTo('#kontakt')">Pilotprojekt anfragen</button>
+        <button class="btn btn--ghost" onclick="scrollTo('#app')">Tool ausprobieren</button>
+      </div>
+      <div class="cta-steps">
+        <div class="cta-step"><div class="cta-step__num">50</div><div class="cta-step__label">Pilotunternehmen</div></div>
+        <div class="cta-step"><div class="cta-step__num">6</div><div class="cta-step__label">Wochen Pilotphase</div></div>
+        <div class="cta-step"><div class="cta-step__num">0 €</div><div class="cta-step__label">Kosten für Unternehmen</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ────────────────────────────── -->
+<section class="contact-section" id="kontakt">
+  <div class="page">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h2>Persönliche Beratung</h2>
+        <p>Sie möchten wissen, wie KI konkret in Ihrer Branche eingesetzt werden kann? Wir beraten Sie individuell — kostenlos und unverbindlich.</p>
+        <div class="hotline">
+          <div class="hotline__label">📞 Direkte Hotline</div>
+          <div class="hotline__number">+43 5 90 900-0</div>
+          <div class="hotline__hours">Mo–Fr, 8:00 – 17:00 Uhr</div>
+        </div>
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)"><span style="color:var(--teal)">✓</span> Kostenlose Erstberatung</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)"><span style="color:var(--teal)">✓</span> Antwort innerhalb von 24h</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)"><span style="color:var(--teal)">✓</span> DSGVO-konforme Beratung</div>
+        </div>
+      </div>
+      <div class="contact-form">
+        <h3>Nachricht an das KI-Kompass-Team</h3>
+        <div class="cf-form">
+          <div class="cf-row">
+            <div class="fg-input"><label>Ihr Name</label><input type="text" placeholder="Max Mustermann"></div>
+            <div class="fg-input"><label>Unternehmen</label><input type="text" placeholder="Muster GmbH"></div>
+          </div>
+          <div class="cf-row">
+            <div class="fg-input"><label>Fachgruppe</label>
+              <select>
+                <option>Bitte wählen…</option>
+                <option>Handel</option><option>Gastronomie &amp; Tourismus</option>
+                <option>Bau &amp; Handwerk</option><option>IT &amp; Consulting</option>
+                <option>Industrie</option><option>Transport &amp; Logistik</option>
+                <option>Immobilien</option><option>Persönliche Dienstleistungen</option>
+              </select>
+            </div>
+            <div class="fg-input"><label>E-Mail-Adresse</label><input type="email" placeholder="info@muster.at"></div>
+          </div>
+          <div class="fg-input"><label>Ihre Frage oder Nachricht</label><textarea placeholder="Womit kann ich Ihnen helfen?"></textarea></div>
+          <button class="cf-submit" onclick="toast('✓ Nachricht gesendet. Wir melden uns innerhalb von 24h.')">Nachricht senden →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─────────────────────────────── -->
+<footer class="footer">
+  <div class="page">
+    <p>© Clemens Buchegger · KI-Kompass · ki-kompass@wko.at</a> · Prototyp für interne Präsentation</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast-el"></div>
+
+<!-- ─── DATA ───────────────────────────────── -->
+<script>
+
+/* ════════════════════════════════════════════════
+   DATA MODEL
+════════════════════════════════════════════════ */
+const DATA = [
+  {
+    id:"handel", icon:"🛍️", title:"Handel",
+    desc:"Stationärer und Online-Handel, Einkauf, Sortimentsmanagement.",
+    bereiche:[
+      {
+        id:"marketing", icon:"📣", title:"Marketing",
+        desc:"Werbung, Social Media und Kampagnenmanagement.",
+        usecases:[
+          {
+            id:"social",
+            tag:"Social Media",
+            title:"Social Media Beiträge erstellen",
+            desc:"Händler müssen regelmäßig ansprechende Inhalte für Instagram, Facebook und andere Kanäle produzieren — das kostet viel Zeit und kreative Energie.",
+            nutzen:"KI generiert in Sekunden fertige Beiträge inklusive Bildvorschlägen und Hashtags, passend zur eigenen Marke und zum aktuellen Angebot. Der Aufwand pro Posting sinkt von 30 Minuten auf unter 5 Minuten.",
+            benefits:[
+              {icon:"⏱️",title:"70% Zeitersparnis",text:"Von der Idee zum fertigen Post in unter 5 Minuten."},
+              {icon:"📅",title:"Konsistenter Redaktionsplan",text:"KI plant und strukturiert Content für Wochen im Voraus."},
+              {icon:"🎯",title:"Zielgruppengerecht",text:"Texte werden automatisch an die Tonalität der Marke angepasst."},
+            ],
+            tools:[
+              {cat:"Inhaltserstellung", items:[
+                {name:"ChatGPT / GPT-4o",desc:"Texte, Captions, Hashtags auf Knopfdruck.",use:"Tägliche Post-Texte erstellen",badge:"abo",price:"Ab € 20/Monat"},
+                {name:"Canva Magic Write",desc:"KI-Text direkt im Grafikdesign-Tool.",use:"Design und Text in einem Tool",badge:"free",price:"Freemium"},
+              ]},
+              {cat:"Design & Medien", items:[
+                {name:"Adobe Firefly",desc:"KI-generierte Produktbilder und Hintergründe.",use:"Produktfotos ohne Fotoshooting",badge:"abo",price:"In Adobe-Abo enthalten"},
+                {name:"Midjourney",desc:"Hochwertige KI-Bilder für Kampagnen.",use:"Kreative Lifestyle-Bilder",badge:"abo",price:"Ab $ 10/Monat"},
+              ]},
+              {cat:"Automatisierung", items:[
+                {name:"Buffer + KI",desc:"Automatisches Einplanen und Veröffentlichen.",use:"Posting ohne manuellen Aufwand",badge:"free",price:"Freemium"},
+              ]},
+            ],
+            pricing:[{label:"Einstieg (Freemium)",val:"€ 0 / Monat"},{label:"Professional",val:"€ 20 – 60 / Monat"},{label:"Agenturlösung",val:"Ab € 100 / Monat"}]
+          },
+          {
+            id:"angebote",
+            tag:"Vertrieb",
+            title:"Angebote schneller schreiben",
+            desc:"Das Erstellen individueller Angebote ist zeitaufwändig. Händler verbringen oft 30–60 Minuten pro Angebot mit Formatierung, Preisberechnung und individuellem Text.",
+            nutzen:"KI erstellt fertige Angebotsvorlagen basierend auf einem kurzen Briefing — inklusive Preistabellen, Produktbeschreibungen und persönlicher Ansprache. Der Zeitaufwand sinkt um bis zu 80%.",
+            benefits:[
+              {icon:"⚡",title:"Angebot in 5 Minuten",text:"Statt 45 Minuten: kurzes Briefing eingeben, fertiges Angebot erhalten."},
+              {icon:"✍️",title:"Professionelle Sprache",text:"Einheitlicher, überzeugender Schreibstil für alle Angebote."},
+              {icon:"🔄",title:"Wiederverwendbare Vorlagen",text:"KI lernt Ihren Stil und verbessert sich mit jedem Angebot."},
+            ],
+            tools:[
+              {cat:"Inhaltserstellung", items:[
+                {name:"ChatGPT Business",desc:"Angebotsentwürfe auf Basis von Stichpunkten.",use:"Professionelle Angebote in Minuten",badge:"abo",price:"Ab € 20/Monat"},
+                {name:"Notion AI",desc:"KI direkt in der Dokumentenumgebung.",use:"Vorlagen verwalten und befüllen",badge:"abo",price:"Ab € 8/Monat"},
+              ]},
+              {cat:"Automatisierung", items:[
+                {name:"Zapier + OpenAI",desc:"Automatische Angebotserstellung aus CRM-Daten.",use:"Angebote ohne manuellen Aufwand",badge:"abo",price:"Ab € 20/Monat"},
+              ]},
+            ],
+            pricing:[{label:"Einfache Tools",val:"€ 8 – 20 / Monat"},{label:"Business-Lösung",val:"€ 50 – 150 / Monat"},{label:"Enterprise",val:"Auf Anfrage"}]
+          },
+        ]
+      },
+      {
+        id:"kundenkommunikation", icon:"💬", title:"Kundenkommunikation",
+        desc:"Anfragen, Service, Beschwerdemanagement.",
+        usecases:[
+          {
+            id:"chatanfragen",
+            tag:"Kundenservice",
+            title:"Kundenanfragen automatisch beantworten",
+            desc:"E-Mails, WhatsApp-Nachrichten und Chat-Anfragen häufen sich täglich. Viele Fragen wiederholen sich — Öffnungszeiten, Verfügbarkeit, Rückgabe.",
+            nutzen:"Ein KI-gestützter Chatbot beantwortet bis zu 70% aller eingehenden Anfragen automatisch rund um die Uhr. Nur komplexe Anfragen landen beim Mitarbeiter.",
+            benefits:[
+              {icon:"🕐",title:"24/7 Erreichbarkeit",text:"Kunden erhalten sofort eine Antwort — auch nachts und am Wochenende."},
+              {icon:"📉",title:"30% weniger Aufwand",text:"Mitarbeiter konzentrieren sich auf Anfragen, die wirklich Expertise brauchen."},
+              {icon:"😊",title:"Höhere Zufriedenheit",text:"Schnelle Antworten erhöhen die Kundenzufriedenheit messbar."},
+            ],
+            tools:[
+              {cat:"Kommunikation", items:[
+                {name:"Tidio",desc:"KI-Chatbot für Website und E-Commerce.",use:"Automatische Erst-Antworten",badge:"free",price:"Freemium / ab € 29/Monat"},
+                {name:"Intercom",desc:"Fortgeschrittenes Kundenkommunikationssystem.",use:"Ticket-Management + KI-Antworten",badge:"abo",price:"Ab € 39/Monat"},
+              ]},
+              {cat:"Automatisierung", items:[
+                {name:"Make (Integromat)",desc:"Verbindet E-Mail, Chat und KI-Tools.",use:"Automatisierte Antwort-Workflows",badge:"free",price:"Freemium"},
+              ]},
+            ],
+            pricing:[{label:"Einstieg",val:"€ 0 – 29 / Monat"},{label:"Business",val:"€ 39 – 99 / Monat"},{label:"Enterprise",val:"Auf Anfrage"}]
+          },
+        ]
+      },
+      {
+        id:"organisation", icon:"📋", title:"Organisation",
+        desc:"Planung, Ablaufoptimierung, Dokumentation.",
+        usecases:[
+          {
+            id:"berichte",
+            tag:"Dokumentation",
+            title:"Berichte automatisch erstellen",
+            desc:"Wöchentliche Verkaufsberichte, Inventurauswertungen und Monatsabschlüsse beanspruchen viel Zeit. Das Zusammenführen von Daten aus verschiedenen Quellen ist fehleranfällig.",
+            nutzen:"KI analysiert vorhandene Daten (Excel, POS-System) und erstellt fertige Berichte mit Kommentaren, Trends und Handlungsempfehlungen — in Minuten statt Stunden.",
+            benefits:[
+              {icon:"📊",title:"Datenanalyse in Minuten",text:"Aus Rohdaten werden fertige Berichte mit Interpretation."},
+              {icon:"🎯",title:"Weniger Fehler",text:"KI verarbeitet Zahlen präziser als manuelle Auswertung."},
+              {icon:"📈",title:"Trends erkannt",text:"KI erkennt Muster und schlägt Maßnahmen vor."},
+            ],
+            tools:[
+              {cat:"Analyse", items:[
+                {name:"ChatGPT Advanced Data Analysis",desc:"Lädt Excel-Dateien hoch und erstellt Auswertungen.",use:"Verkaufsberichte interpretieren",badge:"abo",price:"€ 20/Monat"},
+                {name:"Microsoft Copilot",desc:"KI direkt in Excel und Word.",use:"Berichte in Office erstellen",badge:"ent",price:"Ab € 30/User/Monat"},
+              ]},
+              {cat:"Automatisierung", items:[
+                {name:"Power BI + Copilot",desc:"KI-gestütztes Business Intelligence.",use:"Dashboards automatisch befüllen",badge:"ent",price:"Ab € 10/User/Monat"},
+              ]},
+            ],
+            pricing:[{label:"ChatGPT Plus",val:"€ 20 / Monat"},{label:"Microsoft 365 Copilot",val:"Ab € 30 / User/Monat"},{label:"Power BI Premium",val:"Ab € 20 / User/Monat"}]
+          },
+        ]
+      },
+    ]
+  },
+  {
+    id:"gastro", icon:"🍽️", title:"Gastronomie & Tourismus",
+    desc:"Restaurants, Hotels, Reisebüros, Freizeitbetriebe.",
+    bereiche:[
+      {
+        id:"marketing-g", icon:"📣", title:"Marketing & Buchungen",
+        desc:"Gästekommunikation, Buchungsmanagement, Social Media.",
+        usecases:[
+          {
+            id:"speisekarte",
+            tag:"Inhaltserstellung",
+            title:"Speisekarten & Menütexte erstellen",
+            desc:"Saisonale Speisekarten, Allergenlisten und mehrsprachige Menütexte kosten viel Aufwand. Übersetzungen in Gästesprachen sind teuer und zeitaufwändig.",
+            nutzen:"KI erstellt ansprechende Menütext-Beschreibungen, übersetzt automatisch in mehrere Sprachen und formatiert Allergenlisten — auf Wunsch im Stil des Hauses.",
+            benefits:[
+              {icon:"🌍",title:"Mehrsprachig in Minuten",text:"Englisch, Deutsch, Italienisch — automatisch und korrekt."},
+              {icon:"✍️",title:"Einladende Texte",text:"KI beschreibt Gerichte so, dass Gäste Appetit bekommen."},
+              {icon:"⚠️",title:"Allergenlisten automatisch",text:"Allergene werden aus Rezepturen automatisch ausgelesen."},
+            ],
+            tools:[
+              {cat:"Inhaltserstellung", items:[
+                {name:"ChatGPT",desc:"Menütexte und Beschreibungen auf Befehl.",use:"Tägliche Wochenkarten erstellen",badge:"abo",price:"€ 20/Monat"},
+                {name:"DeepL Pro",desc:"Professionelle Übersetzungen für Gastbetriebe.",use:"Speisekarten übersetzen",badge:"abo",price:"Ab € 8,99/Monat"},
+              ]},
+              {cat:"Design & Medien", items:[
+                {name:"Canva",desc:"Speisekarten gestalten mit KI-Unterstützung.",use:"Ansprechende Karten ohne Designer",badge:"free",price:"Freemium / Pro ab € 13/Monat"},
+              ]},
+            ],
+            pricing:[{label:"Einstieg",val:"€ 0 – 30 / Monat"},{label:"Professional",val:"€ 30 – 80 / Monat"},{label:"Vollintegration",val:"Auf Anfrage"}]
+          },
+          {
+            id:"bewertungen",
+            tag:"Kundenkommunikation",
+            title:"Auf Gästebewertungen reagieren",
+            desc:"Google, TripAdvisor und Booking.com: täglich neue Bewertungen, auf die man reagieren sollte. Jede individuelle Antwort kostet 5–15 Minuten.",
+            nutzen:"KI analysiert den Inhalt jeder Bewertung und schreibt eine passende, professionelle Antwort — positiv wie negativ. Eine Prüfung durch den Inhaber dauert dann nur noch eine Minute.",
+            benefits:[
+              {icon:"⭐",title:"Kein Bewertung ohne Antwort",text:"100% Antwortrate stärkt das Vertrauen potenzieller Gäste."},
+              {icon:"🎯",title:"Ton angepasst",text:"Dankend bei Lob, deeskalierend bei Kritik."},
+              {icon:"⏱️",title:"90% Zeitersparnis",text:"5 Minuten statt 60 Minuten pro Tag."},
+            ],
+            tools:[
+              {cat:"Kommunikation", items:[
+                {name:"MARA AI",desc:"Spezialtool für Hotelbewertungs-Antworten.",use:"Automatische Antworten auf Reviews",badge:"abo",price:"Ab € 39/Monat"},
+                {name:"ChatGPT",desc:"Individuelle Review-Antworten auf Basis des Textes.",use:"Flexible Anpassung des Tons",badge:"abo",price:"€ 20/Monat"},
+              ]},
+            ],
+            pricing:[{label:"ChatGPT Plus",val:"€ 20 / Monat"},{label:"MARA Starter",val:"€ 39 / Monat"},{label:"Enterprise",val:"Auf Anfrage"}]
+          },
+        ]
+      },
+      {
+        id:"personal-g", icon:"👥", title:"Personalmanagement",
+        desc:"Dienstpläne, Onboarding, Schulungen.",
+        usecases:[
+          {
+            id:"dienstplan",
+            tag:"Organisation",
+            title:"Dienstpläne optimieren",
+            desc:"In Gastronomiebetrieben ist die Erstellung und Anpassung von Wochenplänen bei schwankender Auslastung ein täglicher Aufwand. Krankheiten und Sonderwünsche komplizieren die Planung zusätzlich.",
+            nutzen:"KI-gestützte Planungstools berücksichtigen Auslastungsprognosen, Mitarbeiterverfügbarkeiten und gesetzliche Vorgaben und erstellen optimierte Dienstpläne automatisch.",
+            benefits:[
+              {icon:"📅",title:"Automatische Planung",text:"Dienstplan für die Woche in 10 Minuten statt 2 Stunden."},
+              {icon:"⚖️",title:"Gesetzeskonform",text:"Ruhezeiten und Höchstarbeitszeiten werden automatisch eingehalten."},
+              {icon:"🔔",title:"Änderungen in Echtzeit",text:"Kurzfristige Anpassungen werden sofort im System aktualisiert."},
+            ],
+            tools:[
+              {cat:"Automatisierung", items:[
+                {name:"Planday",desc:"KI-gestützte Dienstplanung für Gastronomiebetriebe.",use:"Wochenplan automatisch erstellen",badge:"abo",price:"Ab € 3/User/Monat"},
+                {name:"7shifts",desc:"Speziallösung für Restaurants und Hotels.",use:"Schichtplanung mit KI-Empfehlungen",badge:"free",price:"Freemium"},
+              ]},
+            ],
+            pricing:[{label:"Freemium",val:"€ 0 / Monat"},{label:"Starter",val:"Ab € 3 / User/Monat"},{label:"Business",val:"Ab € 50 / Monat"}]
+          },
+        ]
+      },
+    ]
+  },
+  {
+    id:"bau", icon:"🔨", title:"Bau & Handwerk",
+    desc:"Baugewerbe, Elektro, Sanitär, Zimmerei, Malerbetriebe.",
+    bereiche:[
+      {
+        id:"vertrieb-b", icon:"💼", title:"Vertrieb & Angebote",
+        desc:"Kostenvoranschläge, Angebote, Auftragsmanagement.",
+        usecases:[
+          {
+            id:"kv",
+            tag:"Angebotswesen",
+            title:"Kostenvoranschläge schneller erstellen",
+            desc:"Handwerker verbringen täglich Stunden mit dem Erstellen detaillierter Kostenvoranschläge. Jeder KV ist individuell und erfordert genaue Kalkulation.",
+            nutzen:"KI-gestützte Tools helfen bei der Vorstrukturierung von KVs: Positionen vorschlagen, Mengen abschätzen, Preislisten einbeziehen. Der Handwerker prüft und bestätigt.",
+            benefits:[
+              {icon:"💰",title:"Höhere Angebotsquote",text:"Mehr KVs in derselben Zeit — mehr Aufträge gewonnen."},
+              {icon:"⚡",title:"3x schneller",text:"Standardleistungen werden automatisch vorgeschlagen."},
+              {icon:"✅",title:"Vollständiger",text:"KI erkennt fehlende Positionen und ergänzt sie."},
+            ],
+            tools:[
+              {cat:"Automatisierung", items:[
+                {name:"Hausmaster",desc:"Österreichische Handwerkersoftware mit KV-Modul.",use:"KVs aus Vorlage automatisch befüllen",badge:"abo",price:"Ab € 49/Monat"},
+                {name:"ChatGPT + Excel",desc:"KI erstellt Kalkulationstabellen auf Basis von Briefings.",use:"Freie KV-Erstellung",badge:"abo",price:"€ 20/Monat"},
+              ]},
+              {cat:"Analyse", items:[
+                {name:"PlanRadar",desc:"Baudokumentation und Projektverwaltung mit KI.",use:"Aufmaße und Berichte automatisieren",badge:"abo",price:"Ab € 29/User/Monat"},
+              ]},
+            ],
+            pricing:[{label:"Einstieg",val:"€ 20 – 49 / Monat"},{label:"Professional",val:"€ 49 – 120 / Monat"},{label:"Enterprise",val:"Auf Anfrage"}]
+          },
+        ]
+      },
+      {
+        id:"doku-b", icon:"📄", title:"Dokumentation",
+        desc:"Bautagebuch, Mängeldokumentation, Berichte.",
+        usecases:[
+          {
+            id:"bautagebuch",
+            tag:"Dokumentation",
+            title:"Digitales Bautagebuch führen",
+            desc:"Das tägliche Bautagebuch ist Pflicht und Beweis. Fotos machen, Notizen tippen, Wetter eintragen — auf der Baustelle ist das umständlich.",
+            nutzen:"KI-Apps ermöglichen das Diktieren des Baustatus per Sprache. Fotos werden automatisch mit Zeitstempel, Ort und Beschreibung versehen. Das Bautagebuch schreibt sich fast von selbst.",
+            benefits:[
+              {icon:"🎤",title:"Diktieren statt Tippen",text:"Hände bleiben frei — Spracheingabe direkt auf der Baustelle."},
+              {icon:"📸",title:"Fotos automatisch beschriftet",text:"KI erkennt Inhalte und schlägt Beschriftungen vor."},
+              {icon:"📋",title:"Rechtssichere Dokumentation",text:"Vollständige, zeitgestempelte Protokolle für den Rechtsfall."},
+            ],
+            tools:[
+              {cat:"Automatisierung", items:[
+                {name:"PlanRadar",desc:"Digitales Bautagebuch mit KI-Unterstützung und Bildanalyse.",use:"Tägliche Dokumentation in Minuten",badge:"abo",price:"Ab € 29/User/Monat"},
+                {name:"Dragon Medical (Sprachversion)",desc:"Professionelle Spracherkennung für Fachbegriffe.",use:"Diktat von Bauberichten",badge:"abo",price:"Ab € 99/Monat"},
+              ]},
+            ],
+            pricing:[{label:"PlanRadar Starter",val:"€ 29 / User/Monat"},{label:"Professional",val:"€ 59 / User/Monat"},{label:"Enterprise",val:"Auf Anfrage"}]
+          },
+        ]
+      },
+    ]
+  },
+  {
+    id:"it", icon:"💻", title:"IT & Consulting",
+    desc:"Softwareentwicklung, IT-Dienstleistungen, Unternehmensberatung.",
+    bereiche:[
+      {
+        id:"entwicklung", icon:"⚙️", title:"Entwicklung & Code",
+        desc:"Softwareentwicklung, Testing, Dokumentation.",
+        usecases:[
+          {
+            id:"codegenerierung",
+            tag:"Entwicklung",
+            title:"Code generieren und prüfen",
+            desc:"Entwickler verbringen viel Zeit mit wiederkehrenden Code-Aufgaben: Boilerplate, Fehlersuche, Dokumentation. Diese Aufgaben sind notwendig, aber zeitintensiv.",
+            nutzen:"KI-Assistenten wie GitHub Copilot schreiben Code in Echtzeit mit, schlagen Completions vor und erkennen Bugs bevor sie kompiliert werden. Entwickler werden schneller und Fehlerquoten sinken.",
+            benefits:[
+              {icon:"⚡",title:"55% mehr Produktivität",text:"Laut GitHub-Studie erledigen Copilot-Nutzer Aufgaben deutlich schneller."},
+              {icon:"🐛",title:"Weniger Bugs",text:"KI erkennt typische Fehlermuster beim Schreiben."},
+              {icon:"📚",title:"Auto-Dokumentation",text:"Code wird automatisch kommentiert und erklärt."},
+            ],
+            tools:[
+              {cat:"Automatisierung", items:[
+                {name:"GitHub Copilot",desc:"KI-Programmierbegleiter direkt im Code-Editor.",use:"Tägliches Coding beschleunigen",badge:"abo",price:"$ 10/Monat für Einzelpersonen"},
+                {name:"Cursor AI",desc:"KI-nativer Code-Editor mit tiefem Kontextverständnis.",use:"Komplexe Refactorings",badge:"free",price:"Freemium / Pro ab $ 20/Monat"},
+              ]},
+              {cat:"Analyse", items:[
+                {name:"SonarQube + AI",desc:"Code-Qualitätsanalyse mit KI-Empfehlungen.",use:"Automatische Code-Reviews",badge:"free",price:"Community-Version kostenlos"},
+              ]},
+            ],
+            pricing:[{label:"GitHub Copilot",val:"$ 10 / Monat"},{label:"Cursor Pro",val:"$ 20 / Monat"},{label:"Teams-Lizenz",val:"Ab $ 19 / User/Monat"}]
+          },
+        ]
+      },
+      {
+        id:"beratung", icon:"📊", title:"Beratung & Analysen",
+        desc:"Reports, Präsentationen, Datenanalyse.",
+        usecases:[
+          {
+            id:"praesi",
+            tag:"Präsentation",
+            title:"Präsentationen automatisch erstellen",
+            desc:"Berater erstellen täglich Präsentationen für Kunden. Struktur, Design und Inhalt kosten Stunden — besonders wenn Daten aus verschiedenen Quellen zusammengeführt werden müssen.",
+            nutzen:"KI erstellt vollständige Präsentationsgerüste aus einem kurzen Briefing. Grafiken werden automatisch generiert, Inhalte strukturiert und Folien gestaltet.",
+            benefits:[
+              {icon:"🎨",title:"Fertige Präsentation in 15 Min.",text:"Briefing eingeben, Rohfassung liegt vor."},
+              {icon:"📊",title:"Daten visualisiert",text:"Zahlen werden automatisch in passende Charts umgewandelt."},
+              {icon:"🔄",title:"Schnell anpassbar",text:"Korrekturen nimmt die KI in Sekunden vor."},
+            ],
+            tools:[
+              {cat:"Inhaltserstellung", items:[
+                {name:"Gamma.app",desc:"KI erstellt fertige Präsentationen aus Text.",use:"Kundenpräsentationen in Minuten",badge:"free",price:"Freemium / Pro ab $ 10/Monat"},
+                {name:"Beautiful.ai",desc:"KI-gestütztes Design für Consulting-Decks.",use:"Professionelles Erscheinungsbild",badge:"abo",price:"Ab $ 12/Monat"},
+              ]},
+              {cat:"Analyse", items:[
+                {name:"Microsoft Copilot in PowerPoint",desc:"KI-Assistent direkt in PowerPoint.",use:"Bestehende Slides erweitern",badge:"ent",price:"Ab € 30/User/Monat"},
+              ]},
+            ],
+            pricing:[{label:"Gamma Free",val:"€ 0 / Monat"},{label:"Professional",val:"$ 10 – 30 / Monat"},{label:"Microsoft Copilot",val:"Ab € 30 / User/Monat"}]
+          },
+        ]
+      },
+    ]
+  },
+  {
+    id:"industrie", icon:"🏭", title:"Industrie",
+    desc:"Produktion, Fertigung, Qualitätssicherung, Maschinenbau.",
+    bereiche:[
+      {
+        id:"qm", icon:"🔍", title:"Qualitätssicherung",
+        desc:"Fehlererkennung, Prüfprozesse, Dokumentation.",
+        usecases:[
+          {
+            id:"sichtpruefung",
+            tag:"Qualitätskontrolle",
+            title:"Sichtprüfung automatisieren",
+            desc:"Manuelle Sichtprüfungen von Bauteilen und Produkten sind zeitaufwändig und fehleranfällig. Mitarbeiter ermüden, Fehlerquoten steigen im Schichtbetrieb.",
+            nutzen:"KI-gestützte Kamerasysteme erkennen Oberflächenfehler, Maßabweichungen und Montagefehler in Millisekunden mit höherer Genauigkeit als menschliche Kontrolle.",
+            benefits:[
+              {icon:"🎯",title:">99% Erkennungsrate",text:"KI erkennt Fehler, die menschlichen Augen entgehen."},
+              {icon:"⚡",title:"Echtzeit-Analyse",text:"Fehlerhafte Teile werden sofort aussortiert."},
+              {icon:"📊",title:"Fehlerstatistiken automatisch",text:"Trendanalysen zeigen Schwachstellen im Prozess."},
+            ],
+            tools:[
+              {cat:"Analyse", items:[
+                {name:"Cognex Vision Pro",desc:"Industrielles Kamerasystem mit KI-Bildanalyse.",use:"Automatische Qualitätskontrolle",badge:"ent",price:"Projektbasiert"},
+                {name:"Landing AI (LandingLens)",desc:"No-Code Visual Inspection für Industriebetriebe.",use:"Schneller Einstieg in KI-Prüfung",badge:"ent",price:"Auf Anfrage"},
+              ]},
+              {cat:"Automatisierung", items:[
+                {name:"AWS Rekognition",desc:"Cloud-KI für Bilderkennung in Produktionslinien.",use:"Integration in bestehende Systeme",badge:"abo",price:"Pay-per-use"},
+              ]},
+            ],
+            pricing:[{label:"Cloud-Lösung",val:"Pay-per-use"},{label:"On-Premise Starter",val:"Ab € 5.000 / Jahr"},{label:"Enterprise",val:"Projektbasiert"}]
+          },
+        ]
+      },
+      {
+        id:"predictive", icon:"🔧", title:"Wartung & Instandhaltung",
+        desc:"Predictive Maintenance, Anlagenüberwachung.",
+        usecases:[
+          {
+            id:"maintenance",
+            tag:"Predictive Maintenance",
+            title:"Maschinenausfälle vorhersagen",
+            desc:"Ungeplante Maschinenausfälle kosten Industriebetriebe im Schnitt €250.000 pro Stunde. Klassische Wartungsintervalle sind unflexibel und oft zu früh oder zu spät.",
+            nutzen:"KI analysiert Sensordaten in Echtzeit und erkennt Anomalien, die auf bevorstehende Ausfälle hinweisen — oft Tage oder Wochen im Voraus. Wartung wird planbar.",
+            benefits:[
+              {icon:"🔮",title:"Ausfälle 7 Tage im Voraus",text:"Frühzeitige Warnung ermöglicht geplante Wartung."},
+              {icon:"💰",title:"Kostenreduktion bis 30%",text:"Weniger Notfallreparaturen, günstigere Ersatzteile."},
+              {icon:"📈",title:"OEE verbessert",text:"Höhere Anlagenverfügbarkeit steigert die Produktion."},
+            ],
+            tools:[
+              {cat:"Analyse", items:[
+                {name:"Siemens MindSphere",desc:"Industrielle IoT-Plattform mit KI-Auswertung.",use:"Anlagenüberwachung in Echtzeit",badge:"ent",price:"Auf Anfrage"},
+                {name:"IBM Maximo",desc:"Enterprise Asset Management mit KI-Prognosen.",use:"Wartungsplanung automatisieren",badge:"ent",price:"Auf Anfrage"},
+              ]},
+              {cat:"Automatisierung", items:[
+                {name:"Azure IoT + ML",desc:"Microsoft-Lösung für Predictive Maintenance.",use:"Flexible Cloud-Integration",badge:"abo",price:"Pay-per-use"},
+              ]},
+            ],
+            pricing:[{label:"Cloud-Einstieg",val:"Pay-per-use"},{label:"Mittelständisch",val:"Ab € 20.000 / Jahr"},{label:"Enterprise",val:"Projektbasiert"}]
+          },
+        ]
+      },
+    ]
+  },
+  {
+    id:"transport", icon:"🚛", title:"Transport & Logistik",
+    desc:"Speditionen, Kurierdienste, Lagerhaltung, Flottenmanagement.",
+    bereiche:[
+      {
+        id:"routenplanung", icon:"🗺️", title:"Routenplanung & Disposition",
+        desc:"Tourenoptimierung, Fahrerkoordination, Echtzeitverfolgung.",
+        usecases:[
+          {
+            id:"touren",
+            tag:"Disposition",
+            title:"Touren intelligent optimieren",
+            desc:"Disponenten verbringen Stunden mit der manuellen Tourenplanung. Staus, Änderungen und neue Aufträge erfordern ständige Anpassungen.",
+            nutzen:"KI-gestützte Dispositionssysteme berechnen optimale Routen in Sekunden, berücksichtigen Echtzeit-Verkehr, Zeitfenster und Fahrzeugkapazitäten und passen Touren dynamisch an.",
+            benefits:[
+              {icon:"⛽",title:"15–25% Kraftstoffeinsparung",text:"Kürzere Wege reduzieren Verbrauch und CO₂-Emissionen."},
+              {icon:"📦",title:"Mehr Lieferungen pro Tag",text:"Optimierte Touren ermöglichen mehr Stopps in derselben Zeit."},
+              {icon:"😊",title:"Höhere Kundenzufriedenheit",text:"Genauere Lieferzeitfenster dank Echtzeit-Anpassung."},
+            ],
+            tools:[
+              {cat:"Automatisierung", items:[
+                {name:"Tookan",desc:"KI-gestützte Tourenplanung für Kurier- und Logistikdienste.",use:"Tägliche Tourenoptimierung",badge:"abo",price:"Ab $ 35/Monat"},
+                {name:"OptimoRoute",desc:"Automatische Routenoptimierung mit Zeitfensterverwaltung.",use:"Komplexe Touren planen",badge:"abo",price:"Ab $ 35/Monat"},
+              ]},
+              {cat:"Analyse", items:[
+                {name:"SAP TM + AI",desc:"Enterprise Transportation Management mit KI.",use:"Konzernweite Logistikoptimierung",badge:"ent",price:"Auf Anfrage"},
+              ]},
+            ],
+            pricing:[{label:"Starter",val:"Ab $ 35 / Monat"},{label:"Business",val:"$ 100 – 300 / Monat"},{label:"Enterprise",val:"Auf Anfrage"}]
+          },
+        ]
+      },
+      {
+        id:"lager", icon:"📦", title:"Lagerhaltung",
+        desc:"Bestandsmanagement, Kommissionierung, Inventur.",
+        usecases:[
+          {
+            id:"bestand",
+            tag:"Bestandsmanagement",
+            title:"Lagerbestände automatisch managen",
+            desc:"Zu viel Lagerbestand bindet Kapital, zu wenig führt zu Lieferausfällen. Die Prognose der richtigen Bestellmengen ist komplex und fehleranfällig.",
+            nutzen:"KI analysiert historische Verkaufsdaten, saisonale Schwankungen und externe Faktoren und berechnet optimale Bestellmengen — automatisch und laufend aktualisiert.",
+            benefits:[
+              {icon:"📉",title:"Lagerkosten bis 20% reduziert",text:"Weniger Überbestand durch präzise Bedarfsprognosen."},
+              {icon:"📈",title:"Lieferfähigkeit verbessert",text:"Engpässe werden Wochen im Voraus erkannt."},
+              {icon:"🤖",title:"Automatische Bestellungen",text:"Nachbestellungen werden automatisch ausgelöst."},
+            ],
+            tools:[
+              {cat:"Automatisierung", items:[
+                {name:"Inventory Planner",desc:"KI-gestützte Bestandsplanung für E-Commerce und Handel.",use:"Automatische Nachbestellempfehlungen",badge:"abo",price:"Ab $ 99/Monat"},
+                {name:"SAP IBP",desc:"Integrierte Bedarfsplanung mit KI-Prognosen.",use:"Enterprise Supply Chain Planning",badge:"ent",price:"Auf Anfrage"},
+              ]},
+            ],
+            pricing:[{label:"SME-Lösung",val:"Ab $ 99 / Monat"},{label:"Mid-Market",val:"$ 500 – 2.000 / Monat"},{label:"Enterprise (SAP)",val:"Auf Anfrage"}]
+          },
+        ]
+      },
+    ]
+  },
+  {
+    id:"immobilien", icon:"🏢", title:"Immobilien",
+    desc:"Makler, Hausverwaltungen, Immobilienentwickler, Facility Management.",
+    bereiche:[
+      {
+        id:"vermarktung", icon:"📸", title:"Vermarktung & Exposés",
+        desc:"Inseratstexte, Grundrisse, virtuelle Touren.",
+        usecases:[
+          {
+            id:"exposee",
+            tag:"Inserate",
+            title:"Exposés automatisch texten",
+            desc:"Für jedes Objekt muss ein ansprechendes Exposé mit Beschreibung, Highlights und Lagetext erstellt werden. Das kostet 30–60 Minuten pro Objekt.",
+            nutzen:"KI erstellt aus wenigen Stichpunkten (Größe, Lage, Ausstattung) ein vollständiges, verkaufsförderndes Exposé — in mehreren Sprachen und verschiedenen Tonalitäten.",
+            benefits:[
+              {icon:"⚡",title:"Exposé in 3 Minuten",text:"Statt 45 Minuten: Stichpunkte eingeben, fertigen Text erhalten."},
+              {icon:"🌍",title:"Mehrsprachig",text:"Automatische Übersetzung für internationale Interessenten."},
+              {icon:"💼",title:"Professioneller Stil",text:"Überzeugender, einheitlicher Markenauftritt für alle Objekte."},
+            ],
+            tools:[
+              {cat:"Inhaltserstellung", items:[
+                {name:"ChatGPT",desc:"Exposé-Texte aus Stichpunkten generieren.",use:"Tägliche Inserate erstellen",badge:"abo",price:"€ 20/Monat"},
+                {name:"Propertybase",desc:"Immobilien-CRM mit KI-Textgenerierung.",use:"Direkt im CRM-System texten",badge:"abo",price:"Auf Anfrage"},
+              ]},
+              {cat:"Design & Medien", items:[
+                {name:"Matterport",desc:"360°-Touren und KI-gestützte Grundrissgenerierung.",use:"Virtuelle Besichtigungen anbieten",badge:"abo",price:"Ab $ 9/Monat"},
+              ]},
+            ],
+            pricing:[{label:"ChatGPT Plus",val:"€ 20 / Monat"},{label:"Professional Suite",val:"€ 50 – 150 / Monat"},{label:"CRM-Integration",val:"Auf Anfrage"}]
+          },
+        ]
+      },
+      {
+        id:"verwaltung-i", icon:"📋", title:"Hausverwaltung",
+        desc:"Nebenkostenabrechnungen, Mieteranfragen, Wartungsmanagement.",
+        usecases:[
+          {
+            id:"mieterkommunikation",
+            tag:"Kommunikation",
+            title:"Mieteranfragen automatisch bearbeiten",
+            desc:"Hausverwaltungen erhalten täglich Anfragen zu Betriebskosten, Reparaturen, Mietverträgen. Die Beantwortung ist standardisiert, aber zeitaufwändig.",
+            nutzen:"KI-Chatbots und automatische E-Mail-Antworten lösen bis zu 60% der Anfragen sofort — mit korrekten Informationen aus der Datenbank. Mitarbeiter kümmern sich um komplexe Fälle.",
+            benefits:[
+              {icon:"🕐",title:"24/7 Erreichbarkeit",text:"Mieter erhalten sofort Antworten, auch außerhalb der Bürozeiten."},
+              {icon:"📉",title:"60% weniger manuelle Anfragen",text:"Routinefragen werden automatisch beantwortet."},
+              {icon:"📊",title:"Anfragen tracken",text:"KI kategorisiert und priorisiert automatisch."},
+            ],
+            tools:[
+              {cat:"Kommunikation", items:[
+                {name:"Tidio",desc:"KI-Chatbot für Hausverwaltungs-Websites.",use:"Mieteranfragen automatisch beantworten",badge:"free",price:"Freemium / ab € 29/Monat"},
+                {name:"Verwalter Suite (Austria)",desc:"Österreichische Hausverwaltungs-Software mit KI-Modul.",use:"Integrierte Mieterverwaltung",badge:"abo",price:"Ab € 49/Monat"},
+              ]},
+            ],
+            pricing:[{label:"Einstieg",val:"€ 0 – 29 / Monat"},{label:"Professional",val:"€ 49 – 150 / Monat"},{label:"Enterprise",val:"Auf Anfrage"}]
+          },
+        ]
+      },
+    ]
+  },
+  {
+    id:"dienstleistungen", icon:"✂️", title:"Persönliche Dienstleistungen",
+    desc:"Friseure, Kosmetik, Massagen, Reinigung, persönliche Services.",
+    bereiche:[
+      {
+        id:"terminierung", icon:"📅", title:"Terminmanagement",
+        desc:"Buchungen, Erinnerungen, Auslastungsoptimierung.",
+        usecases:[
+          {
+            id:"onlinebuchung",
+            tag:"Buchungssystem",
+            title:"Online-Buchung mit KI-Erinnerungen",
+            desc:"Dienstleister verlieren täglich Umsatz durch verpasste Termine und kurzfristige Absagen. Telefonische Buchungen binden Mitarbeiterzeit.",
+            nutzen:"Intelligente Buchungssysteme nehmen Termine online entgegen, senden automatische Erinnerungen per SMS/E-Mail und befüllen freie Kapazitäten mit Wartelistenpatienten.",
+            benefits:[
+              {icon:"📉",title:"No-Shows um 40% reduziert",text:"Automatische Erinnerungen 24h und 2h vor dem Termin."},
+              {icon:"🌙",title:"24/7 Buchungen",text:"Kunden buchen zu jeder Zeit — ohne Anruf."},
+              {icon:"📈",title:"Mehr Umsatz",text:"Freie Slots werden automatisch mit Wartekunden befüllt."},
+            ],
+            tools:[
+              {cat:"Automatisierung", items:[
+                {name:"Treatwell",desc:"Buchungsplattform speziell für Beauty und Wellness.",use:"Online sichtbar werden und buchen lassen",badge:"abo",price:"Provisionsbasiert"},
+                {name:"Calendly + Automation",desc:"Flexibles Buchungssystem mit Erinnerungen.",use:"Eigene Buchungsseite in 30 Min.",badge:"free",price:"Freemium / ab $ 8/Monat"},
+              ]},
+              {cat:"Kommunikation", items:[
+                {name:"Fresha (Shortlist)",desc:"Kostenlose Buchungsplattform für Salon-Betriebe.",use:"Komplettes Terminmanagement",badge:"free",price:"Kostenlos"},
+              ]},
+            ],
+            pricing:[{label:"Kostenlos",val:"€ 0 / Monat"},{label:"Professional",val:"€ 8 – 30 / Monat"},{label:"Provisionsmodell",val:"3–10% je Buchung"}]
+          },
+        ]
+      },
+      {
+        id:"kundenbindung-d", icon:"❤️", title:"Kundenbindung",
+        desc:"Stammkundenpflege, Newsletter, Loyalty-Programme.",
+        usecases:[
+          {
+            id:"newsletter",
+            tag:"Marketing",
+            title:"Personalisierte Newsletter versenden",
+            desc:"Stammkunden zu halten ist günstiger als neue zu gewinnen. Aber individuelle, persönliche Kommunikation per Newsletter ist zeitaufwändig zu erstellen.",
+            nutzen:"KI erstellt personalisierte Newsletter-Texte auf Basis von Kundenpräferenzen und -historia, schlägt optimale Versandzeitpunkte vor und passt den Ton individuell an.",
+            benefits:[
+              {icon:"📊",title:"2x höhere Öffnungsraten",text:"Personalisierte Betreffzeilen steigern die Öffnungsrate deutlich."},
+              {icon:"✍️",title:"Texte in Minuten",text:"KI erstellt Newsletter-Entwürfe auf Basis weniger Stichpunkte."},
+              {icon:"🎯",title:"Relevante Angebote",text:"Kunden erhalten Angebote, die zu ihren Vorlieben passen."},
+            ],
+            tools:[
+              {cat:"Kommunikation", items:[
+                {name:"Mailchimp + AI",desc:"Newsletter-Tool mit KI-Texterstellung und Segmentierung.",use:"Monatliche Newsletter halbautomatisch",badge:"free",price:"Freemium / ab $ 13/Monat"},
+                {name:"Brevo (Sendinblue)",desc:"E-Mail-Marketing mit KI-Personalisierung.",use:"Automatisierte Kampagnen",badge:"free",price:"Freemium / ab € 9/Monat"},
+              ]},
+            ],
+            pricing:[{label:"Kostenlos",val:"€ 0 / Monat"},{label:"Starter",val:"€ 9 – 30 / Monat"},{label:"Professional",val:"Ab € 50 / Monat"}]
+          },
+        ]
+      },
+    ]
+  },
+];
+
+
+/* ════════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════════ */
+let state = { fg: null, bereich: null, uc: null };
+
+/* ════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════ */
+(function init() {
+  const grid = document.getElementById('fg-grid');
+  grid.innerHTML = DATA.map(fg => {
+    const totalUC = fg.bereiche.reduce((s, b) => s + b.usecases.length, 0);
+    return `
+      <div class="fg-card" onclick="selectFG('${fg.id}')">
+        <div class="fg-icon">${fg.icon}</div>
+        <div class="fg-title">${fg.title}</div>
+        <div class="fg-desc">${fg.desc}</div>
+        <div class="fg-footer">
+          <span class="fg-count">${totalUC} Use Cases</span>
+          <div class="fg-arrow">›</div>
+        </div>
+      </div>`;
+  }).join('');
+  setStep(1);
+})();
+
+/* ════════════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════════════ */
+function goTo(step) {
+  if (step === 1) { state = { fg: null, bereich: null, uc: null }; }
+  if (step === 2) { state.bereich = null; state.uc = null; }
+  if (step === 3) { state.uc = null; }
+  setStep(step);
+  document.getElementById('app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function setStep(n) {
+  // Sections
+  [1,2,3,4].forEach(i => {
+    document.getElementById('sec-'+i).classList.toggle('active', i === n);
+  });
+  // Step indicators
+  [1,2,3,4].forEach(i => {
+    const pip = document.getElementById('sp-'+i);
+    pip.classList.remove('active', 'done');
+    if (i < n) pip.classList.add('done');
+    if (i === n) pip.classList.add('active');
+    const conn = document.getElementById('sc-'+i);
+    if (conn) conn.classList.toggle('done', i < n);
+  });
+  // Breadbar
+  updateBreadbar(n);
+}
+
+function updateBreadbar(step) {
+  const bb = document.getElementById('breadbar');
+  const bi = document.getElementById('breadbar-inner');
+  if (step === 1) { bb.classList.remove('visible'); return; }
+  bb.classList.add('visible');
+  let html = `<div class="breadcrumb-item"><button onclick="goTo(1)">🏠 Fachgruppen</button></div>`;
+  if (step >= 2 && state.fg) {
+    html += `<span class="breadcrumb-sep">›</span><div class="breadcrumb-item">`;
+    if (step > 2) html += `<button onclick="goTo(2)">${state.fg.icon} ${state.fg.title}</button>`;
+    else html += `<span class="breadcrumb-current">${state.fg.icon} ${state.fg.title}</span>`;
+    html += `</div>`;
+  }
+  if (step >= 3 && state.bereich) {
+    html += `<span class="breadcrumb-sep">›</span><div class="breadcrumb-item">`;
+    if (step > 3) html += `<button onclick="goTo(3)">${state.bereich.icon} ${state.bereich.title}</button>`;
+    else html += `<span class="breadcrumb-current">${state.bereich.icon} ${state.bereich.title}</span>`;
+    html += `</div>`;
+  }
+  if (step === 4 && state.uc) {
+    html += `<span class="breadcrumb-sep">›</span><div class="breadcrumb-item"><span class="breadcrumb-current">${state.uc.title}</span></div>`;
+  }
+  bi.innerHTML = html;
+}
+
+/* ════════════════════════════════════════════════
+   STEP 1 → SELECT FACHGRUPPE
+════════════════════════════════════════════════ */
+function selectFG(id) {
+  state.fg = DATA.find(f => f.id === id);
+
+  // Header
+  document.getElementById('fg-header').innerHTML = `
+    <div class="fachgruppe-header">
+      <div class="fachgruppe-header__icon">${state.fg.icon}</div>
+      <div>
+        <div class="fachgruppe-header__title">${state.fg.title}</div>
+        <div class="fachgruppe-header__desc">${state.fg.desc}</div>
+      </div>
+    </div>`;
+
+  // Bereiche grid
+  document.getElementById('bereich-grid').innerHTML = state.fg.bereiche.map(b => `
+    <div class="bereich-card" onclick="selectBereich('${b.id}')">
+      <div class="bereich-icon">${b.icon}</div>
+      <div class="bereich-title">${b.title}</div>
+      <div class="bereich-desc">${b.desc}</div>
+      <div class="bereich-count">${b.usecases.length} Use Case${b.usecases.length > 1 ? 's' : ''}</div>
+    </div>`).join('');
+
+  goTo(2);
+}
+
+/* ════════════════════════════════════════════════
+   STEP 2 → SELECT BEREICH
+════════════════════════════════════════════════ */
+function selectBereich(id) {
+  state.bereich = state.fg.bereiche.find(b => b.id === id);
+
+  // Context header
+  document.getElementById('bereich-context').innerHTML = `
+    <div class="bereich-context">
+      <div class="bereich-context__icon">${state.bereich.icon}</div>
+      <div>
+        <div class="bereich-context__label">${state.fg.title}</div>
+        <div class="bereich-context__title">${state.bereich.title}</div>
+      </div>
+    </div>`;
+
+  // Use case grid
+  document.getElementById('uc-grid').innerHTML = state.bereich.usecases.map(uc => {
+    const toolCount = uc.tools.reduce((s, t) => s + t.items.length, 0);
+    return `
+      <div class="uc-card" onclick="selectUC('${uc.id}')">
+        <div class="uc-card__tag">${uc.tag}</div>
+        <div class="uc-card__title">${uc.title}</div>
+        <div class="uc-card__desc">${uc.desc}</div>
+        <div class="uc-card__footer">
+          <span class="uc-tools-count">${toolCount} Tools verfügbar</span>
+          <div class="uc-arrow">›</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  goTo(3);
+}
+
+/* ════════════════════════════════════════════════
+   STEP 3 → SELECT USE CASE
+════════════════════════════════════════════════ */
+function selectUC(id) {
+  state.uc = state.bereich.usecases.find(u => u.id === id);
+  renderDetail();
+  goTo(4);
+}
+
+/* ════════════════════════════════════════════════
+   RENDER DETAIL (Step 4)
+════════════════════════════════════════════════ */
+function renderDetail() {
+  const uc = state.uc;
+
+  const benefitsHTML = uc.benefits.map(b => `
+    <div class="bi">
+      <div class="bi__icon">${b.icon}</div>
+      <div class="bi__text"><strong>${b.title}</strong><span>${b.text}</span></div>
+    </div>`).join('');
+
+  const toolsHTML = uc.tools.map(cat => `
+    <div class="tool-cat">
+      <div class="tool-cat__label">${cat.cat}</div>
+      <div class="tool-items">
+        ${cat.items.map(t => `
+          <div class="tool-item">
+            <div class="tool-item__head">
+              <div class="tool-item__name">${t.name}</div>
+              <span class="tool-item__badge tool-item__badge--${t.badge}">${t.badge === 'free' ? 'Freemium' : t.badge === 'abo' ? 'Abo' : 'Enterprise'}</span>
+            </div>
+            <div class="tool-item__desc">${t.desc}</div>
+            <div class="tool-item__use">→ ${t.use} · ${t.price}</div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  const pricingHTML = uc.pricing.map(p => `
+    <div class="sp-row"><span class="sp-label">${p.label}</span><span class="sp-val">${p.val}</span></div>`).join('');
+
+  document.getElementById('detail-content').innerHTML = `
+    <!-- MAIN -->
+    <div class="detail-main">
+
+      <!-- Hero -->
+      <div class="detail-hero">
+        <div class="detail-hero__eyebrow">◆ ${uc.tag} · ${state.bereich.title} · ${state.fg.title}</div>
+        <div class="detail-hero__title">${uc.title}</div>
+        <div class="detail-hero__desc">${uc.desc}</div>
+      </div>
+
+      <!-- KI-Nutzen -->
+      <div class="nutzen-box">
+        <div class="nutzen-box__label">💡 Wie KI hier konkret hilft</div>
+        <div class="nutzen-box__text">${uc.nutzen}</div>
+      </div>
+
+      <!-- Benefits -->
+      <div class="d-card">
+        <div class="d-card-head">✦ Vorteile im Arbeitsalltag</div>
+        <div class="benefit-items">${benefitsHTML}</div>
+      </div>
+
+      <!-- Tools -->
+      <div class="d-card">
+        <div class="d-card-head">🛠 Empfohlene Tools nach Kategorie</div>
+        ${toolsHTML}
+      </div>
+
+      <!-- INTEGRATION SECTION -->
+      <div class="int-section" id="int-sec">
+        <div class="int-section__header">
+          <div class="int-badge">Schritt 4 von 4</div>
+          <h3>Integration &amp; Einführung</h3>
+          <p>Die Auswahl eines KI-Tools allein reicht nicht aus. Erst durch eine strukturierte Einführung, geschulte Mitarbeiter und angepasste Abläufe entsteht ein echter Nutzen im Arbeitsalltag.</p>
+        </div>
+        <div class="int-cards">
+          <div class="int-card">
+            <span class="int-card__icon">💻</span>
+            <div class="int-card__title">Online-Schulung</div>
+            <div class="int-card__desc">Digitale Einführung für alle Mitarbeiter. Praxisfälle, typische Fehler und Best Practices — bequem von zu Hause oder aus dem Büro.</div>
+            <div class="int-meta">
+              <div class="int-meta-item">60–90 Minuten</div>
+              <div class="int-meta-item">Via Teams oder Zoom</div>
+              <div class="int-meta-item">Inklusive Schulungsunterlagen</div>
+            </div>
+          </div>
+          <div class="int-card">
+            <span class="int-card__icon">🏢</span>
+            <div class="int-card__title">Workshop vor Ort</div>
+            <div class="int-card__desc">Gemeinsame Analyse der bestehenden Abläufe und direkte Integration des Tools in die täglichen Prozesse Ihres Betriebs.</div>
+            <div class="int-meta">
+              <div class="int-meta-item">2–4 Stunden</div>
+              <div class="int-meta-item">Im Betrieb vor Ort</div>
+              <div class="int-meta-item">Individuelle Ablaufempfehlungen</div>
+            </div>
+          </div>
+          <div class="int-card">
+            <span class="int-card__icon">🤝</span>
+            <div class="int-card__title">Betriebsinterne Umsetzung</div>
+            <div class="int-card__desc">Begleitung bei der Einbindung des Tools in bestehende Systeme, Workflows und Arbeitsplatzkonfigurationen.</div>
+            <div class="int-meta">
+              <div class="int-meta-item">Individuelle Empfehlungen</div>
+              <div class="int-meta-item">Für Inhaber und Team</div>
+              <div class="int-meta-item">Schritt-für-Schritt-Anleitung</div>
+            </div>
+          </div>
+          <div class="int-card">
+            <span class="int-card__icon">📞</span>
+            <div class="int-card__title">Support &amp; Follow-up</div>
+            <div class="int-card__desc">Nach der Einführung begleiten wir Sie weiter: Hotline, E-Mail-Support und ein Follow-up-Gespräch nach 30 Tagen.</div>
+            <div class="int-meta">
+              <div class="int-meta-item">Hotline &amp; E-Mail</div>
+              <div class="int-meta-item">Follow-up nach 30 Tagen</div>
+              <div class="int-meta-item">Laufende Optimierung</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Booking Form -->
+        <div class="booking-section">
+          <h4>Schulung oder Workshop anfragen</h4>
+          <p>Füllen Sie das Formular aus — wir melden uns innerhalb von 24 Stunden mit einem konkreten Vorschlag.</p>
+          <div class="booking-grid">
+            <div class="fg-input">
+              <label>Für welches Tool?</label>
+              <select>
+                <option>Bitte wählen…</option>
+                ${uc.tools.flatMap(c => c.items).map(t => `<option>${t.name}</option>`).join('')}
+                <option>Anderes / Noch nicht entschieden</option>
+              </select>
+            </div>
+            <div class="fg-input">
+              <label>Art der Unterstützung</label>
+              <select>
+                <option>Bitte wählen…</option>
+                <option>Online-Schulung</option>
+                <option>Workshop vor Ort</option>
+                <option>Beratungsgespräch</option>
+                <option>Follow-up &amp; Support</option>
+              </select>
+            </div>
+            <div class="fg-input">
+              <label>Ihr Name</label>
+              <input type="text" placeholder="Max Mustermann">
+            </div>
+            <div class="fg-input">
+              <label>Unternehmen</label>
+              <input type="text" placeholder="Muster GmbH">
+            </div>
+            <div class="fg-input">
+              <label>E-Mail-Adresse</label>
+              <input type="email" placeholder="info@muster.at">
+            </div>
+            <div class="fg-input">
+              <label>Telefonnummer</label>
+              <input type="tel" placeholder="+43 1 234 567 89">
+            </div>
+            <div class="fg-input" style="grid-column: 1 / -1">
+              <label>Nachricht / Wunschtermin</label>
+              <textarea placeholder="Z. B.: Wir möchten ${uc.title.toLowerCase()} einführen und suchen einen Termin im Mai…"></textarea>
+            </div>
+          </div>
+          <button class="booking-submit" onclick="toast('✓ Anfrage gesendet. Wir melden uns innerhalb von 24h.')">Anfrage senden →</button>
+        </div>
+
+        <!-- Why Box -->
+        <div class="why-box">
+          <div class="why-box__icon">💡</div>
+          <div>
+            <h4>Warum dieser Schritt entscheidend ist</h4>
+            <p>Erfahrungsgemäß scheitern 60% der KI-Einführungen nicht an der Technologie, sondern an fehlender Schulung und nicht angepassten Abläufen. Mit der richtigen Begleitung entsteht echte Zeitersparnis und messbarer Nutzen — von Tag 1.</p>
+          </div>
+        </div>
+
+      </div><!-- /int-section -->
+    </div><!-- /detail-main -->
+
+    <!-- SIDEBAR -->
+    <div class="detail-sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-card__head">💶 Kostenmodelle</div>
+        <div class="sidebar-pricing">${pricingHTML}</div>
+      </div>
+
+      <div class="sidebar-card" style="background:var(--gold-lt);border-color:rgba(184,134,11,0.2)">
+        <div class="sidebar-card__head" style="color:var(--gold)">🎓 Einführung buchen</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:12px">Tool ausgewählt? Jetzt direkt eine Schulung oder einen Workshop anfragen.</p>
+        <button class="cta-sidebar-btn" onclick="document.getElementById('int-sec').scrollIntoView({behavior:'smooth'})">Zur Buchung ↓</button>
+      </div>
+
+      <div class="sidebar-card" style="background:var(--teal-lt);border-color:rgba(0,122,138,0.2)">
+        <div class="sidebar-card__head" style="color:var(--teal)">💡 Kostenlose Beratung</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:12px">Noch unsicher? Wir beraten Sie kostenlos und unverbindlich — auf Wunsch auch in Ihrer Fachgruppe vor Ort.</p>
+        <button class="cta-sidebar-btn" style="background:var(--teal)" onclick="scrollTo('#kontakt')">Beratung anfragen →</button>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card__head">📍 Ihr Pfad</div>
+        <div class="sidebar-you-are">
+          <div class="l1">${state.fg.icon} ${state.fg.title}</div>
+          <div class="l2">→ ${state.bereich.icon} ${state.bereich.title}</div>
+          <div class="l3">→ ${uc.title}</div>
+          <div class="l4">● KI-Tools &amp; Einführung</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════
+   UTILITIES
+════════════════════════════════════════════════ */
+function scrollTo(selector) {
+  const el = document.querySelector(selector);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast-el');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+// Intersection observer for scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='none'; } });
+}, { threshold: 0.1 });
+
+</script>
+</body>
+</html>
